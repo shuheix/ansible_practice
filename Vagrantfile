@@ -28,8 +28,8 @@ $common_provisioning = <<-'SCRIPT'
 SCRIPT
 
 $ubuntu_provisioning = <<-'SCRIPT'
-  apt update
-  apt upgrade -y
+  sudo apt update
+  sudo apt upgrade -y
   reboot
 SCRIPT
 
