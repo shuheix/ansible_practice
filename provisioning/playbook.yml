@@ -1,0 +1,18 @@
+# taskは基本ansible.buildinでまかなえる
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/index.html
+---
+- hosts: all
+  become: yes
+  tasks:
+  - name: apt update
+    apt:
+      update_cache: yes
+
+  - name: apt upgrade
+    apt:
+      upgrade: yes
+
+  - name: hello_world
+    shell:
+      cmd: echo "hello world"
+
