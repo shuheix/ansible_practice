@@ -12,7 +12,52 @@
     apt:
       upgrade: yes
 
-  - name: hello_world
+  - name: install git
+    apt:
+      name: git
+      state: present
+
+  - name: add stack user
+    user:
+      name: stack
+      shell: /bin/bash
+      home: /opt/stack
+      create_home: yes
+  
+  - name: Allow stack user
+    lineinfile:
+      dest: /etc/sudoers.d/stack
+      line: 'stack ALL=(ALL) NOPASSWD: ALL'
+      create: yes
+      validate: 'visudo -cf %s'
+
+  - name: add execute
     shell:
-      cmd: echo "hello world"
+      cmd: chmod +x /opt/stack
+  
+  - name: git clone devstack
+    git:
+      repo: 'https://opendev.org/openstack/devstack'
+      dest: /opt/devstack
+
+  - name: create local.conf file
+    copy:
+      content: |
+        [[local|localrc]]
+        ADMIN_PASSWORD=secret
+        DATABASE_PASSWORD=$ADMIN_PASSWORD
+        RABBIT_PASSWORD=$ADMIN_PASSWORD
+        SERVICE_PASSWORD=$ADMIN_PASSWORD
+      dest: /opt/devstack/local.conf
+  
+  # - name: execute stack.sh
+  #   become: yes
+  #   become_user: stack
+  #   shell: ./stack.sh
+  #   args:
+  #     chdir: /opt/devstack
+
+
+
+
 
